@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Script to find and log all executable files recursively
+
+# Set target directory - Change this path to scan a different directory
+# Use "." for current directory, or specify full path like "/home/user/documents"
+TARGET_DIR="${1:-.}"
+LOG_FILE="executables.log"
+
+# Check if target directory exists
+if [[ ! -d "$TARGET_DIR" ]]; then
+    echo "Error: Directory '$TARGET_DIR' does not exist"
+    exit 1
+fi
+
+# Clear the log file (create new or overwrite existing)
+> "$LOG_FILE"
+
+echo "Scanning directory: $TARGET_DIR"
+echo "Logging executable files to: $LOG_FILE"
+
+# Find all executable files recursively and log them
+find "$TARGET_DIR" -type f -executable -print0 | while IFS= read -r -d '' file; do
+    echo "$file" >> "$LOG_FILE"
+done
+
+# Count and display results
+count=$(wc -l < "$LOG_FILE")
+echo "Found $count executable files"
+echo "Results saved to $LOG_FILE"
