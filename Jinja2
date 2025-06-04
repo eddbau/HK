@@ -1,0 +1,22 @@
+{# Device Score Filter Template #}
+{# Purpose: Filter devices with scores above a specified threshold #}
+
+{# Set the threshold value for filtering #}
+{%- set threshold = 75 -%}
+
+{# Filter devices using selectattr() to get scores greater than threshold #}
+{# selectattr('score', '>', threshold) - selects objects where score > threshold #}
+{# | list - converts the filter result to a list for easier manipulation #}
+{%- set filtered_devices = devices | selectattr('score', '>', threshold) | list -%}
+
+{# Check if any devices meet the criteria #}
+{% if filtered_devices -%}
+Devices with scores above {{ threshold }}:
+{# Loop through each qualifying device #}
+{% for device in filtered_devices -%}
+- {{ device.name }}: {{ device.score }}
+{% endfor %}
+{%- else -%}
+{# Display message when no devices meet the criteria #}
+No devices found with scores above {{ threshold }}.
+{%- endif %}
